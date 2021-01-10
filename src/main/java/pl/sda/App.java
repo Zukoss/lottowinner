@@ -1,38 +1,47 @@
 package pl.sda;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import pl.sda.model.lotto.Games;
-import pl.sda.model.lotto.Lotto;
-import pl.sda.model.lotto.Mini;
+import pl.sda.model.Games;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class App
 {
     public static void main( String[] args ) throws IOException, InterruptedException{
-        // http://serwis.mobilotto.pl/mapi_v7/index.php?json=getGames
+        // https://www.lotto.pl/api/lotteries/draw-results/by-gametype?game=Lotto&index=1&size=15&sort=drawDate&order=DESC
 
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+            private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+            @Override
+            public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                    throws JsonParseException {
+                return LocalDateTime.parse(json.getAsString(), formatter);
+            }
+        }).create();
+
         OkHttpClient client = new OkHttpClient();
 
-            Request request = new Request.Builder()
-                    .url("http://serwis.mobilotto.pl/mapi_v7/index.php?json=getGames")
-                    .build();
+        Request request = new Request.Builder()
+                .url("https://www.lotto.pl/api/lotteries/draw-results/by-gametype?game=Lotto&index=1&size=15&sort=drawDate&order=DESC")
+                .build();
 
              Response response = client.newCall(request).execute();
-
              String stringresposne = response.body().string();
              Games dataFromBackend =  gson.fromJson(stringresposne, Games.class);
 
              System.out.println();
-             System.out.println(dataFromBackend);
+             //System.out.println(dataFromBackend);
              System.out.println();
 
-             System.out.println(dataFromBackend.getLotto());
-             System.out.println(dataFromBackend.getMini());
+             System.out.println(dataFromBackend.getTotalRows());
+
 
             }
         }
