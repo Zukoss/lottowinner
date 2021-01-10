@@ -1,6 +1,7 @@
 
 package pl.sda.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
@@ -10,25 +11,25 @@ public class Result {
 
     @SerializedName("drawDate")
     @Expose
-    private String drawDate;
+    private LocalDateTime drawDate;
     @SerializedName("drawSystemId")
     @Expose
     private int drawSystemId;
     @SerializedName("gameType")
     @Expose
-    private String gameType;
+    private GameType gameType;
     @SerializedName("resultsJson")
     @Expose
-    private List<Integer> resultsJson = new ArrayList<Integer>();
+    private List<Integer> numbers = new ArrayList<Integer>();
     @SerializedName("specialResults")
     @Expose
     private List<Object> specialResults = new ArrayList<Object>();
 
-    public String getDrawDate() {
+    public LocalDateTime getDrawDate() {
         return drawDate;
     }
 
-    public void setDrawDate(String drawDate) {
+    public void setDrawDate(LocalDateTime drawDate) {
         this.drawDate = drawDate;
     }
 
@@ -40,20 +41,20 @@ public class Result {
         this.drawSystemId = drawSystemId;
     }
 
-    public String getGameType() {
+    public GameType getGameType() {
         return gameType;
     }
 
-    public void setGameType(String gameType) {
+    public void setGameType(GameType gameType) {
         this.gameType = gameType;
     }
 
     public List<Integer> getResultsJson() {
-        return resultsJson;
+        return numbers;
     }
 
     public void setResultsJson(List<Integer> resultsJson) {
-        this.resultsJson = resultsJson;
+        this.numbers = resultsJson;
     }
 
     public List<Object> getSpecialResults() {
